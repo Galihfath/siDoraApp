@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require('../models/User');
 
 // Fungsi registrasi untuk pengguna Pendonor (frontend)
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => {  // Tambahkan async di sini
   const { email, password, name } = req.body;
 
   if (!email || !password || !name) {
@@ -30,6 +30,7 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({ message: 'Registrasi berhasil' });
   } catch (error) {
+    console.error('Error during registration:', error); // Log error di server
     res.status(500).json({ message: 'Terjadi kesalahan pada server' });
   }
 });

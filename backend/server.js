@@ -18,13 +18,21 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Ambil JWT sec
 app.use(cors()); // Aktifkan CORS untuk semua origin
 app.use(express.json()); // Middleware untuk menangani JSON
 
-// Koneksi ke MongoDB Atlas
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch((error) => console.error('Error connecting to MongoDB:', error));
+// Fungsi untuk menghubungkan ke MongoDB Atlas
+async function connectDB() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Connected to MongoDB Atlas');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  }
+}
+
+// Panggil fungsi untuk menghubungkan ke MongoDB
+connectDB();
 
 // Route untuk root "/"
 app.get('/', (req, res) => {

@@ -15,7 +15,6 @@ import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
   const [name, setName] = useState(''); // State untuk nama lengkap
-  const [username, setUsername] = useState(''); // State untuk username
   const [email, setEmail] = useState(''); // State untuk email
   const [password, setPassword] = useState(''); // State untuk password
   const toast = useToast(); // Untuk menampilkan notifikasi
@@ -25,13 +24,13 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
   
-    console.log("Data being sent:", { name, username, email, password }); // Log data yang dikirim
+    console.log("Data being sent:", { name, email, password }); // Log data yang dikirim
   
     try {
-      const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/register', {
+      const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, username, email, password }), // Kirim data yang lengkap
+        body: JSON.stringify({ name, email, password }), // Hanya kirim name, email, dan password
       });
   
       if (!response.ok) {
@@ -64,7 +63,6 @@ function Register() {
       });
     }
   };
-  
 
   return (
     <Flex align="center" justify="center" minH="100vh" bg="gray.100">
@@ -81,15 +79,6 @@ function Register() {
                 placeholder="Enter your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)} // Set nilai nama lengkap
-              />
-            </FormControl>
-            <FormControl id="username" isRequired>
-              <FormLabel>Username</FormLabel>
-              <Input
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)} // Set nilai username
               />
             </FormControl>
             <FormControl id="email" isRequired>
