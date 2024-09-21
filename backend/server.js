@@ -28,6 +28,7 @@ async function connectDB() {
     console.log('Connected to MongoDB Atlas');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);
+    process.exit(1); // Keluar dari aplikasi jika tidak bisa terhubung ke DB
   }
 }
 
@@ -62,9 +63,11 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid password' });
     }
 
-    // Jika login berhasil, buat token JWT dan kirimkan ke client
+    // Jika login berhasil, buat token JWT dan kirimkan ke client bersama nama pengguna
     const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    
+    // Kembalikan token dan nama pengguna ke client
+    res.json({ token, name: user.name });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ error: 'Error logging in' });

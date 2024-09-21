@@ -39,8 +39,9 @@ function Login() {
       const data = await response.json();
       console.log('Login successful', data);
 
-      // Simpan token JWT di localStorage atau sessionStorage (untuk autentikasi berikutnya)
-      localStorage.setItem('token', data.token);
+      // Simpan token dan nama pengguna di localStorage
+      localStorage.setItem('token', data.token); // Simpan token untuk autentikasi berikutnya
+      localStorage.setItem('name', data.name);   // Simpan nama pengguna dari respons
 
       // Tampilkan notifikasi sukses
       toast({
