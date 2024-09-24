@@ -7,6 +7,8 @@ import HomePage from './HomePage';
 import DonorDashboard from './DonorDashboard';
 import PrivateRoute from './PrivateRoute';
 import EditProfile from './EditProfile';
+import Profile from './Profile';
+
 
 function App() {
   const [message, setMessage] = useState('');
@@ -40,6 +42,9 @@ function App() {
             />
             <Route path="/edit-profile" element={
               <PrivateRoute><EditProfile /></PrivateRoute>} 
+            />
+            <Route path="/profile" element={
+              <PrivateRoute><Profile /></PrivateRoute>} 
             />
           </Routes>
         </div>

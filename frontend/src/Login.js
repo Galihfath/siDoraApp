@@ -21,43 +21,41 @@ function Login() {
 
   // Fungsi untuk menangani form submit (login)
   const handleLogin = async (e) => {
-    e.preventDefault(); // Mencegah reload halaman
+    e.preventDefault(); // Prevent page reload
 
     try {
-      // Kirim permintaan POST ke endpoint login di backend
-      const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/login', {
+      // Send POST request to correct login endpoint in the backend
+      const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }), // Kirim email dan password ke backend
+        body: JSON.stringify({ email, password }), // Send email and password to backend
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Parsing respons dari server
       const data = await response.json();
       console.log('Login successful', data);
 
-      // Simpan token dan nama pengguna di localStorage
-      localStorage.setItem('token', data.token); // Simpan token untuk autentikasi berikutnya
-      localStorage.setItem('name', data.name);   // Simpan nama pengguna dari respons
+      // Store token and username in localStorage
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('name', data.name);
 
-      // Tampilkan notifikasi sukses
+      // Show success toast
       toast({
         title: 'Login successful.',
         status: 'success',
-        duration: 2000,  // Durasi pesan sukses
+        duration: 2000,
         isClosable: true,
       });
 
-      // Redirect ke halaman dashboard atau halaman lainnya setelah login sukses
+      // Redirect to dashboard after login
       setTimeout(() => {
-        navigate('/dashboard'); // Ganti dengan halaman tujuan setelah login
+        navigate('/dashboard');
       }, 2000);
 
     } catch (error) {
-      // Tampilkan notifikasi error jika login gagal
       console.error('Error during login:', error);
       toast({
         title: 'Error logging in.',
@@ -68,6 +66,7 @@ function Login() {
       });
     }
   };
+
 
   return (
     <Flex align="center" justify="center" minH="100vh" bg="gray.100">

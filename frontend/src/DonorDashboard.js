@@ -108,8 +108,8 @@ function DonorDashboard() {
           </MenuButton>
           <MenuList>
             {/* Warna hijau untuk Edit Data User dan merah untuk Logout */}
-            <MenuItem as={Link} to="/edit-profile" _hover={{ color: 'gray.700' }} color="green.500">
-              Edit Profile
+            <MenuItem as={Link} to="/profile" _hover={{ color: 'gray.700' }} color="green.500">
+              Profile
             </MenuItem>
             <MenuItem _hover={{ color: 'gray.700' }} color="red.500" onClick={handleLogout}>Logout</MenuItem>
           </MenuList>
