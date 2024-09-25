@@ -32,7 +32,7 @@ const Navbar = ({ scrollMessage, handleLogout, userName }) => {
           </Box>
         </HStack>
         <Divider orientation="vertical" borderColor="white" height="40px" />
-        <HStack spacing={2}>
+        <HStack as={Link} to="/dashboard" spacing={2}>
           <Avatar src="/path-to-sidora-logo.png" size="sm" />
           <Heading as="h1" size="lg">siDORA</Heading>
         </HStack>
