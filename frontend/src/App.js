@@ -3,6 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { ThemeProvider } from 'styled-components';  // Import ThemeProvider
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
+import BloodLoading from './components/BloodLoading'; // Import komponen loading darah
 
 // Lazy loading komponen
 const Register = lazy(() => import('./Register'));
@@ -42,7 +43,7 @@ function App() {
         <Router>
           <div>
             <h1>{message}</h1> 
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<BloodLoading />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<Login />} />
