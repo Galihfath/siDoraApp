@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ChakraProvider } from '@chakra-ui/react'; // Tambahkan import ChakraProvider
+import theme from './theme/theme'; // Import tema dari folder src/theme
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ChakraProvider theme={theme}> {/* Bungkus aplikasi dengan ChakraProvider */}
+      <App />
+    </ChakraProvider>
   </React.StrictMode>
 );
 

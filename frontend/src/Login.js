@@ -12,6 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion'; // Import Framer Motion
 
 function Login() {
   const [email, setEmail] = useState(''); // State untuk email
@@ -67,15 +68,37 @@ function Login() {
     }
   };
 
+  const MotionBox = motion(Box);
+  const MotionHeading = motion(Heading); // Motion untuk heading login
 
   return (
-    <Flex align="center" justify="center" minH="100vh" bg="gray.100">
-      <Box bg="white" p={6} rounded="md" shadow="md" width="400px">
-        <Heading mb={6} textAlign="center">
+    <Flex align="center" justify="center" minH="100vh" bg="gray.100" direction="column">      
+      {/* Card Login */}
+      <MotionBox
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
+        bg="white"
+        p={8}
+        rounded="md"
+        shadow="lg"
+        width={{ base: "90%", sm: "400px" }}
+      >
+        {/* Heading dengan animasi zoom dan fade */}
+        <MotionHeading
+          as="h1"
+          mb={6}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          textAlign="center"
+          fontSize="4xl"
+          color="pmiRed.500"  // Warna merah PMI
+        >
           Login
-        </Heading>
+        </MotionHeading>
         <form onSubmit={handleLogin}>
-          <VStack spacing={4}>
+          <VStack spacing={6}>
             <FormControl id="email" isRequired>
               <FormLabel>Email Address</FormLabel>
               <Input
@@ -94,18 +117,24 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)} // Set nilai password
               />
             </FormControl>
-            <Button colorScheme="teal" type="submit" width="full">
+            <Button
+              bg="greenAccent.500" // Warna hijau untuk tombol
+              color="white"
+              _hover={{ bg: "greenAccent.700" }} // Hover hijau lebih gelap
+              type="submit"
+              width="full"
+            >
               Login
             </Button>
           </VStack>
         </form>
-        <Text mt={4} textAlign="center">
+        <Text mt={4} textAlign="center" color="blueAccent.500"> {/* Warna biru pada link */}
           Don't have an account?{' '}
-          <Link to="/register" style={{ color: 'teal', fontWeight: 'bold' }}>
+          <Link to="/register" style={{ color: 'blueAccent.500', fontWeight: 'bold' }}>
             Register here
           </Link>
         </Text>
-      </Box>
+      </MotionBox>
     </Flex>
   );
 }
