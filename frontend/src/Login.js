@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -19,6 +19,11 @@ function Login() {
   const [password, setPassword] = useState(''); // State untuk password
   const toast = useToast(); // Untuk menampilkan notifikasi
   const navigate = useNavigate(); // Untuk redirect ke halaman lain
+  const [isFirstLoad, setIsFirstLoad] = useState(true); // State untuk cek apakah pertama kali render
+
+  useEffect(() => {
+    setIsFirstLoad(false); // Set false setelah komponen pertama kali di-render
+  }, []);
 
   // Fungsi untuk menangani form submit (login)
   const handleLogin = async (e) => {
@@ -75,8 +80,8 @@ function Login() {
     <Flex align="center" justify="center" minH="100vh" bg="gray.100" direction="column">      
       {/* Card Login */}
       <MotionBox
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={isFirstLoad ? { opacity: 0, y: -30 } : {}}
+        animate={isFirstLoad ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, ease: "easeInOut" }}
         bg="white"
         p={8}
@@ -88,8 +93,8 @@ function Login() {
         <MotionHeading
           as="h1"
           mb={6}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={isFirstLoad ? { opacity: 0, scale: 0.5 } : {}}
+          animate={isFirstLoad ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
           textAlign="center"
           fontSize="4xl"
@@ -118,9 +123,9 @@ function Login() {
               />
             </FormControl>
             <Button
-              bg="greenAccent.500" // Warna hijau untuk tombol
+              bg="#2ECC71" // Warna hijau untuk tombol
               color="white"
-              _hover={{ bg: "greenAccent.700" }} // Hover hijau lebih gelap
+              _hover={{ bg: "#27AE60" }} // Hover hijau lebih gelap
               type="submit"
               width="full"
             >
