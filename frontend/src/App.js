@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import BloodLoading from './components/BloodLoading';
 import theme from './theme/theme'; // Import tema dari folder src/theme
-import './app.css'; 
+import './App.css'; 
 
 // Lazy loading untuk komponen
 const Register = lazy(() => import('./Register'));

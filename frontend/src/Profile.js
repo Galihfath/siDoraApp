@@ -99,11 +99,25 @@ function Profile() {
     7: 'Penghayat',
     8: 'Lain-lain',
   };
-
+  const [scrollMessage] = useState('Ayo Donor Darah! Jadwal Donor Darah Terdekat: 25 Sept 2024 di PMI Jakarta');
+  const [userName, setUserName] = useState('');
+  // Mengambil nama user dari local storage saat komponen pertama kali dimuat
+  useEffect(() => {
+    const storedName = localStorage.getItem('name');
+    if (storedName) {
+      setUserName(storedName);
+    }
+  }, []);
+  // Fungsi untuk handle logout dan menghapus data dari local storage
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    navigate('/login');
+  };
   return (
     <Box bg="neutral.50" minHeight="100vh">
       {/* Navbar dengan pesan scroll */}
-      <Navbar scrollMessage="Ayo Donor Darah!" handleLogout={() => navigate('/login')} />
+      <Navbar scrollMessage={scrollMessage} handleLogout={handleLogout} userName={userName} />
 
       {/* Kontainer utama untuk profil pengguna */}
       <Container maxW="container.md" py={10}>

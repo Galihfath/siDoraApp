@@ -45,6 +45,30 @@ function EditProfile() {
     fetch('https://ibnux.github.io/data-indonesia/provinsi.json')
       .then((response) => response.json())
       .then((data) => setProvinsi(data));
+
+    // Mengambil data profil pengguna dari API
+    const fetchProfile = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/user/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) { // Gunakan response dengan benar di dalam scope
+          setFormData(data); // Set data dari backend ke formData
+        } else {
+          console.error('Gagal mengambil data profil:', data.message);
+        }
+      } catch (error) {
+        console.error('Gagal mengambil data profil:', error);
+      }
+    };
+
+    fetchProfile();
   }, []);
 
   // Mengambil data kabupaten berdasarkan provinsi yang dipilih
@@ -116,7 +140,7 @@ function EditProfile() {
       <Navbar scrollMessage="Ayo Donor Darah!" handleLogout={() => navigate('/login')} />
 
       {/* Kontainer utama untuk formulir */}
-      <Container maxW="container.lg" mt={10} p={6} bg="white" borderRadius="md" shadow="lg">
+      <Container maxW="container.sm" mt={10} p={6} bg="white" borderRadius="md" shadow="lg">
         <Heading as="h2" mb={8} textAlign="center" color="pmiRed.500">
           Edit Profil
         </Heading>
@@ -125,7 +149,7 @@ function EditProfile() {
           {/* Nama Lengkap (Readonly) */}
           <FormControl id="name" isReadOnly>
             <FormLabel>Nama Lengkap</FormLabel>
-            <Input value={userName} readOnly />
+            <Input name="name" value={userName} readOnly />
           </FormControl>
           
           {/* Form Field Lainnya */}
@@ -183,7 +207,7 @@ function EditProfile() {
             { label: 'Lain-lain', value: '5' }
           ]} value={formData.pekerjaan} onChange={handleInputChange} />
           <FormField label="Nomor Telepon" name="noHp" type="number" value={formData.noHp} onChange={handleInputChange} />
-          
+
           {/* Tombol Simpan */}
           <Button colorScheme="teal" width="full" mt={6} onClick={handleSaveChanges}>
             Simpan Perubahan
