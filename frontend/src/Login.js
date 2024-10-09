@@ -1,3 +1,4 @@
+// Login.js
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -30,11 +31,11 @@ function Login() {
     e.preventDefault(); // Prevent page reload
 
     try {
-      // Send POST request to correct login endpoint in the backend
+      // Send POST request ke endpoint login di backend
       const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }), // Send email and password to backend
+        body: JSON.stringify({ email, password }), // Kirim email dan password ke backend
       });
 
       if (!response.ok) {
@@ -44,19 +45,19 @@ function Login() {
       const data = await response.json();
       console.log('Login successful', data);
 
-      // Store token and username in localStorage
+      // Simpan token dan nama pengguna di localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('name', data.name);
 
-      // Show success toast
+      // Tampilkan notifikasi sukses
       toast({
-        title: 'Login successful.',
+        title: 'Login berhasil.',
         status: 'success',
         duration: 2000,
         isClosable: true,
       });
 
-      // Redirect to dashboard after login
+      // Redirect ke dashboard setelah login
       setTimeout(() => {
         navigate('/dashboard');
       }, 2000);
@@ -64,7 +65,7 @@ function Login() {
     } catch (error) {
       console.error('Error during login:', error);
       toast({
-        title: 'Error logging in.',
+        title: 'Login gagal.',
         description: error.message,
         status: 'error',
         duration: 3000,
@@ -73,11 +74,12 @@ function Login() {
     }
   };
 
+  // Gunakan framer-motion untuk animasi
   const MotionBox = motion(Box);
   const MotionHeading = motion(Heading); // Motion untuk heading login
 
   return (
-    <Flex align="center" justify="center" minH="100vh" bg="gray.100" direction="column">      
+    <Flex align="center" justify="center" minH="100vh" bg="neutral.50" direction="column">      
       {/* Card Login */}
       <MotionBox
         initial={isFirstLoad ? { opacity: 0, y: -30 } : {}}
@@ -105,38 +107,41 @@ function Login() {
         <form onSubmit={handleLogin}>
           <VStack spacing={6}>
             <FormControl id="email" isRequired>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>Email</FormLabel>
               <Input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Masukkan email Anda"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)} // Set nilai email
+                focusBorderColor="blueAccent.500" // Warna border saat fokus
               />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <Input
                 type="password"
-                placeholder="Enter your password"
+                placeholder="Masukkan password Anda"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)} // Set nilai password
+                focusBorderColor="blueAccent.500" // Warna border saat fokus
               />
             </FormControl>
             <Button
-              bg="#2ECC71" // Warna hijau untuk tombol
+              bg="greenAccent.500" // Warna hijau untuk tombol
               color="white"
-              _hover={{ bg: "#27AE60" }} // Hover hijau lebih gelap
+              _hover={{ bg: "greenAccent.600" }} // Hover hijau lebih gelap
               type="submit"
               width="full"
+              isLoading={false} // Bisa dikontrol dengan state loading
             >
               Login
             </Button>
           </VStack>
         </form>
         <Text mt={4} textAlign="center" color="blueAccent.500"> {/* Warna biru pada link */}
-          Don't have an account?{' '}
+          Belum punya akun?{' '}
           <Link to="/register" style={{ color: 'blueAccent.500', fontWeight: 'bold' }}>
-            Register here
+            Daftar di sini
           </Link>
         </Text>
       </MotionBox>

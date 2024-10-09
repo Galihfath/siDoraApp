@@ -1,60 +1,33 @@
-/* Overlay untuk loader */
+/* BloodLoading.css */
 .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.8); /* Transparansi background */
-    z-index: 10; /* Loader di atas konten */
-  }
-  
-  /* Efek blur pada konten selama loading */
-  .blurred {
-    filter: blur(5px); /* Efek blur */
-    transition: filter 0.3s ease; /* Transisi yang halus */
-  }
-  
-  /* Gaya untuk konten halaman */
-  .content {
-    padding: 20px;
-  }
-  
-  /* Skeleton loader styles */
-  .skeleton-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .skeleton {
-    background-color: #ddd;
-    border-radius: 4px;
-    animation: shimmer 1.5s infinite;
-  }
-  
-  .skeleton-title {
-    width: 60%;
-    height: 20px;
-  }
-  
-  .skeleton-text {
-    width: 90%;
-    height: 15px;
-  }
-  
-  @keyframes shimmer {
-    0% {
-      background-color: #f0f0f0;
-    }
-    50% {
-      background-color: #e0e0e0;
-    }
-    100% {
-      background-color: #f0f0f0;
-    }
-  }
-  
+  backdrop-filter: blur(6px); /* Efek blur pada overlay */
+}
+
+.content.blurred {
+  filter: blur(5px); /* Efek blur pada konten ketika loading */
+}
+
+.skeleton-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.skeleton {
+  background-color: #e3e3e3;
+  border-radius: 8px;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 20px;
+}
+
+.skeleton-text {
+  width: 80%;
+  height: 16px;
+}

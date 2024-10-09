@@ -1,12 +1,15 @@
+// index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { ChakraProvider } from '@chakra-ui/react'; // Import ChakraProvider dari Chakra UI
+import theme from './theme/theme'; // Import tema dari folder src/theme
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ChakraProvider } from '@chakra-ui/react'; // Tambahkan import ChakraProvider
-import theme from './theme/theme'; // Import tema dari folder src/theme
 
+// Buat root element untuk React
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Render aplikasi dengan ChakraProvider dan tema kustom
 root.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}> {/* Bungkus aplikasi dengan ChakraProvider */}
@@ -15,7 +18,5 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Mengaktifkan logging performa aplikasi (opsional)
 reportWebVitals();
