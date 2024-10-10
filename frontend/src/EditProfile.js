@@ -1,9 +1,11 @@
-// EditProfile.js
+// src/EditProfile.js
 import React, { useState, useEffect } from 'react';
 import { Box, Heading, VStack, Button, FormControl, FormLabel, Input, Container } from '@chakra-ui/react';
 import FormField from './components/FormField'; // Import komponen FormField
 import Navbar from './components/Navbar'; // Import Navbar
 import { useNavigate } from 'react-router-dom';
+import fetchData from './utils/fetchData'; // Import fetchData untuk pemanggilan API
+import { fetchProvinsi, fetchKabupaten, fetchKecamatan, fetchKelurahan } from './utils/locationServices'; // Import fungsi fetch dari locationServices
 
 function EditProfile() {
   // State untuk menyimpan data formulir pengguna
@@ -25,7 +27,7 @@ function EditProfile() {
     pekerjaan: '',
     beratBadan: '',
     tinggiBadan: '',
-    noHp: ''
+    noHp: '',
   });
 
   // State untuk menyimpan daftar lokasi wilayah
@@ -36,72 +38,78 @@ function EditProfile() {
   const [userName, setUserName] = useState('');
   const navigate = useNavigate();
 
-  // Mengambil nama user dari local storage dan data provinsi
+  // Mengambil nama user dari local storage dan data profil dari backend
   useEffect(() => {
     const storedName = localStorage.getItem('name') || 'User';
     setUserName(storedName);
 
-    // Fetch data provinsi dari API
-    fetch('https://ibnux.github.io/data-indonesia/provinsi.json')
-      .then((response) => response.json())
-      .then((data) => setProvinsi(data));
-
-    // Mengambil data profil pengguna dari API
-    const fetchProfile = async () => {
-      const token = localStorage.getItem('token');
+    // Fungsi untuk fetch data profil pengguna
+    const fetchUserProfile = async () => {
       try {
-        const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/user/profile', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+        const token = localStorage.getItem('token'); // Ambil token dari local storage
+        const userProfile = await fetchData('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/user/profile', 'GET', {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        const data = await response.json();
-        if (response.ok) { // Gunakan response dengan benar di dalam scope
-          setFormData(data); // Set data dari backend ke formData
-        } else {
-          console.error('Gagal mengambil data profil:', data.message);
-        }
+        setFormData(userProfile); // Set data profil pengguna ke state formData
       } catch (error) {
-        console.error('Gagal mengambil data profil:', error);
+        console.error('Error fetching user profile data:', error);
       }
     };
 
-    fetchProfile();
+    // Ambil data provinsi saat komponen dimuat
+    const getProvinsi = async () => {
+      try {
+        const provinsiData = await fetchProvinsi();
+        setProvinsi(provinsiData);
+      } catch (error) {
+        console.error('Error fetching provinsi data:', error);
+      }
+    };
+
+    fetchUserProfile(); // Panggil fungsi untuk mengambil data profil
+    getProvinsi(); // Panggil fungsi untuk mengambil data provinsi
   }, []);
 
   // Mengambil data kabupaten berdasarkan provinsi yang dipilih
-  const handleProvinsiChange = (e) => {
+  const handleProvinsiChange = async (e) => {
     const provId = e.target.value;
     setFormData({ ...formData, provinsi: provId });
 
     // Fetch data Kabupaten/Kota
-    fetch(`https://ibnux.github.io/data-indonesia/kabupaten/${provId}.json`)
-      .then((response) => response.json())
-      .then((data) => setKabupaten(data));
+    try {
+      const kabupatenData = await fetchKabupaten(provId);
+      setKabupaten(kabupatenData);
+    } catch (error) {
+      console.error('Error fetching kabupaten data:', error);
+    }
   };
 
   // Mengambil data kecamatan berdasarkan kabupaten yang dipilih
-  const handleKabupatenChange = (e) => {
+  const handleKabupatenChange = async (e) => {
     const kabId = e.target.value;
     setFormData({ ...formData, kota: kabId });
 
     // Fetch data Kecamatan
-    fetch(`https://ibnux.github.io/data-indonesia/kecamatan/${kabId}.json`)
-      .then((response) => response.json())
-      .then((data) => setKecamatan(data));
+    try {
+      const kecamatanData = await fetchKecamatan(kabId);
+      setKecamatan(kecamatanData);
+    } catch (error) {
+      console.error('Error fetching kecamatan data:', error);
+    }
   };
 
   // Mengambil data kelurahan berdasarkan kecamatan yang dipilih
-  const handleKecamatanChange = (e) => {
+  const handleKecamatanChange = async (e) => {
     const kecId = e.target.value;
     setFormData({ ...formData, kecamatan: kecId });
 
     // Fetch data Kelurahan
-    fetch(`https://ibnux.github.io/data-indonesia/kelurahan/${kecId}.json`)
-      .then((response) => response.json())
-      .then((data) => setKelurahan(data));
+    try {
+      const kelurahanData = await fetchKelurahan(kecId);
+      setKelurahan(kelurahanData);
+    } catch (error) {
+      console.error('Error fetching kelurahan data:', error);
+    }
   };
 
   // Mengubah nilai di form berdasarkan input pengguna
@@ -114,20 +122,12 @@ function EditProfile() {
   const handleSaveChanges = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/user/update', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
+      await fetchData('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/user/update', 'PUT', {
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
       });
-      if (response.ok) {
-        alert('Profil berhasil diperbarui');
-        navigate('/profile');
-      } else {
-        alert('Gagal memperbarui profil');
-      }
+      alert('Profil berhasil diperbarui');
+      navigate('/profile'); // Redirect ke halaman profile setelah berhasil menyimpan data
     } catch (error) {
       console.error('Terjadi kesalahan saat memperbarui profil:', error);
       alert('Terjadi kesalahan. Silakan coba lagi.');
@@ -135,21 +135,21 @@ function EditProfile() {
   };
 
   return (
-    <Box bg="neutral.50" minHeight="100vh"> {/* Latar belakang yang lebih terang */}
-      {/* Navbar dengan pesan scroll */}
-      <Navbar scrollMessage="Ayo Donor Darah!" handleLogout={() => navigate('/login')} />
-
+    <Box minHeight="100vh">
+      <Navbar scrollMessage="Ayo Donor Darah!" handleLogout={() => navigate('/login')} /> {/* Menampilkan Navbar */}
+      
       {/* Kontainer utama untuk formulir */}
-      <Container maxW="container.sm" mt={10} p={6} bg="white" borderRadius="md" shadow="lg">
+      <Container maxW="container.lg" mt={10} p={6} bg="white" borderRadius="md" shadow="lg">
         <Heading as="h2" mb={8} textAlign="center" color="pmiRed.500">
           Edit Profil
         </Heading>
         
+        {/* Form Edit Profile */}
         <VStack spacing={4} align="stretch">
           {/* Nama Lengkap (Readonly) */}
           <FormControl id="name" isReadOnly>
             <FormLabel>Nama Lengkap</FormLabel>
-            <Input name="name" value={userName} readOnly />
+            <Input value={userName} readOnly />
           </FormControl>
           
           {/* Form Field Lainnya */}
@@ -178,6 +178,8 @@ function EditProfile() {
           <FormField label="Alamat Lengkap" name="alamat" value={formData.alamat} onChange={handleInputChange} />
           <FormField label="RT" name="rt" type="number" value={formData.rt} onChange={handleInputChange} />
           <FormField label="RW" name="rw" type="number" value={formData.rw} onChange={handleInputChange} />
+          
+          {/* Form untuk pemilihan Provinsi, Kabupaten/Kota, Kecamatan, dan Kelurahan/Desa */}
           <FormField label="Provinsi" name="provinsi" isSelect options={provinsi.map((prov) => ({
             label: prov.nama, value: prov.id
           }))} value={formData.provinsi} onChange={handleProvinsiChange} />
@@ -190,6 +192,8 @@ function EditProfile() {
           <FormField label="Kelurahan/Desa" name="kelurahan" isSelect options={kelurahan.map((kel) => ({
             label: kel.nama, value: kel.id
           }))} value={formData.kelurahan} onChange={handleInputChange} />
+
+          {/* Field Lainnya */}
           <FormField label="Kode Pos" name="kodePos" type="number" value={formData.kodePos} onChange={handleInputChange} />
           <FormField label="Golongan Darah" name="golonganDarah" isSelect options={[
             { label: 'Tidak Tahu', value: '0' },

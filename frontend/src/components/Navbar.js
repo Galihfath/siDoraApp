@@ -1,72 +1,76 @@
-// Navbar.js
-import { Box, Flex, HStack, IconButton, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack, Avatar, Menu, MenuButton, MenuList, MenuItem, Text, Spacer, useDisclosure } from '@chakra-ui/react';
+// src/components/Navbar.js
+import React from 'react';
+import { Flex, Text, HStack, Avatar, Menu, MenuButton, MenuList, MenuItem, Box, IconButton, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, VStack } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Import useLocation dari react-router-dom
+import { useDisclosure } from '@chakra-ui/hooks';
+import { useUser } from '../context/UserContext'; // Import useUser untuk akses context
 
-const Navbar = ({ scrollMessage, handleLogout, userName }) => {
+
+const Navbar = () => {
+  const { userName, scrollMessage, handleLogout } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const location = useLocation(); // Dapatkan informasi rute saat ini
+
+  // Pengecekan apakah Navbar perlu ditampilkan
+  const hideNavbar = ['/login', '/register', '/'].includes(location.pathname); // Navbar tidak ditampilkan di halaman Login, Register, dan HomePage
+
+  if (hideNavbar) {
+    return null; // Jika rutenya adalah login, register, atau home, tidak render Navbar
+  }
 
   return (
-    <Box position="fixed" width="100%" top="0" zIndex="999" bg="greenAccent.500"> {/* Navbar dengan posisi fixed */}
-      <Flex alignItems="center" px={4} py={2} color="white">
-        {/* Icon untuk membuka menu drawer di sisi kiri */}
-        <IconButton icon={<HamburgerIcon />} aria-label="Open Menu" onClick={onOpen} variant="ghost" colorScheme="whiteAlpha" mr={4} />
+    <Flex position="fixed" top="0" width="100%" bg="pmiRed.500" p={4} color="white" alignItems="center" zIndex="999">
+      {/* Tombol untuk membuka Drawer */}
+      <IconButton icon={<HamburgerIcon />} aria-label="Open Menu" onClick={onOpen} variant="ghost" colorScheme="whiteAlpha" mr={4} />
 
-        {/* Drawer untuk menu samping */}
-        <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerBody>
-              <VStack align="start" spacing={4} mt={10}>
-                <Link to="/daftar-donor">Daftar Donor Darah</Link>
-                <Link to="/jadwal-donor">Jadwal Donor Darah</Link>
-                <Link to="/riwayat-donor">Riwayat Donor</Link>
-                <Link to="/kartu-donor">Kartu Donor Darah</Link>
-              </VStack>
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
+      {/* Drawer untuk navigasi sidebar */}
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerBody>
+            <VStack align="start" spacing={4} mt={10}>
+              <Link to="/daftar-donor">Daftar Donor Darah</Link>
+              <Link to="/jadwal-donor">Jadwal Donor Darah</Link>
+              <Link to="/riwayat-donor">Riwayat Donor</Link>
+              <Link to="/kartu-donor">Kartu Donor Darah</Link>
+            </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
-        {/* Logo PMI dan Logo siDORA */}
-        <HStack spacing={4}>
-          <HStack spacing={2}>
-            <Avatar src="/path-to-pmi-logo.png" size="sm" />
-            <Box>
-              <Text fontSize="sm" fontWeight="bold">Palang Merah</Text>
-              <Text fontSize="sm" fontWeight="bold">Indonesia</Text>
-            </Box>
-          </HStack>
-          <Spacer />
-          <HStack>
-            <Text fontSize="lg" fontWeight="bold">siDORA</Text>
-          </HStack>
-        </HStack>
-
-        <Spacer />
-
-        {/* Pesan bergerak */}
-        <Box ml={4} overflow="hidden" whiteSpace="nowrap" flexGrow={1}>
-          <Text as="marquee" fontSize="sm" color="yellow.300">
-            {scrollMessage}
-          </Text>
+      {/* Logo dan Nama Aplikasi */}
+      <Link to="/dashboard">
+      <HStack spacing={4}>
+        <Avatar src="/path-to-pmi-logo.png" size="sm" />
+        <Box>
+          <Text color="greenAccent.500" fontSize="xl" fontWeight="bold">SiDORA</Text>
         </Box>
+      </HStack>
+      </Link>
 
-        {/* Menu Profil */}
-        <Menu>
+      {/* Scroll Message */}
+      <Box ml={4} overflow="hidden" whiteSpace="nowrap" flexGrow={1}>
+        <Text as="marquee" fontSize="sm" color="yellow.300">
+          {scrollMessage}
+        </Text>
+      </Box>
+
+      {/* User Profile Menu */}
+      <Menu>
         <MenuButton>
-          <HStack spacing={2} align="center"> {/* Gunakan HStack untuk menyusun Avatar dan Text dalam satu baris */}
+          <HStack spacing={2} align="center">
             <Avatar src="/path-to-user-avatar.png" size="sm" />
             <Text>{userName}</Text>
           </HStack>
         </MenuButton>
-          <MenuList>
-            <MenuItem as={Link} to="/profile" color="green.500">Profile</MenuItem>
-            <MenuItem color="red.500" onClick={handleLogout}>Logout</MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
-    </Box>
+        <MenuList>
+          <MenuItem as={Link} to="/profile" color="green.500">Profile</MenuItem>
+          <MenuItem color="red.500" onClick={handleLogout}>Logout</MenuItem>
+        </MenuList>
+      </Menu>
+    </Flex>
   );
 };
 

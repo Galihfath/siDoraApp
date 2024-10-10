@@ -1,13 +1,14 @@
-// App.js
-import React, { useEffect, useState, Suspense, lazy } from 'react'; 
+// src/App.js
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import BloodLoading from './components/BloodLoading';
-import theme from './theme/theme'; // Import tema dari folder src/theme
-import './App.css'; 
+import Navbar from './components/Navbar';
+import fetchData from './utils/fetchData'; // Import fungsi fetchData
+import theme from './theme/theme';
+import './App.css';
 
-// Lazy loading untuk komponen
 const Register = lazy(() => import('./Register'));
 const Login = lazy(() => import('./Login'));
 const HomePage = lazy(() => import('./HomePage'));
@@ -17,24 +18,29 @@ const Profile = lazy(() => import('./Profile'));
 
 function App() {
   const [message, setMessage] = useState('');
+  const location = useLocation();
 
-  // Fetch data dari backend saat komponen di-mount
   useEffect(() => {
-    fetch('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/api')
-      .then((response) => response.json())
-      .then((data) => {
-        setMessage(data.message); // Data pesan dari backend
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    const getMessage = async () => {
+      try {
+        const data = await fetchData('https://fuzzy-space-pancake-gjw64rprvpj3644-5000.app.github.dev/api');
+        setMessage(data.message); // Set message dari hasil fetchData
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    getMessage(); // Panggil fungsi getMessage saat komponen pertama kali dimuat
   }, []);
 
+  const showNavbar = !['/login', '/register', '/'].includes(location.pathname);
+
   return (
-    <ChakraProvider theme={theme}> {/* Gunakan tema dari theme.js */}
-      <Router>
-        <div>
-          <h1>{message}</h1> 
+    <ChakraProvider theme={theme}>
+      <div>
+        {showNavbar && <Navbar />}
+        <div style={{ marginTop: showNavbar ? '60px' : '0' }}>
+          <h1>{message}</h1>
           <Suspense fallback={<BloodLoading />}>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -54,7 +60,7 @@ function App() {
             </Routes>
           </Suspense>
         </div>
-      </Router>
+      </div>
     </ChakraProvider>
   );
 }

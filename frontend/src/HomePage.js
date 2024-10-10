@@ -19,8 +19,8 @@ import { CheckCircleIcon } from '@chakra-ui/icons'; // Import Chakra Icons
 
 function HomePage() {
   return (
-    <Box bg="neutral.50" minHeight="100vh" py={10}> {/* Latar belakang yang lebih terang */}
-      <Container maxW="container.lg" p={4}>
+    <Box bg="rgba(255, 255, 255, 0.5)" minHeight="100vh" py={10}> {/* Latar belakang yang lebih terang */}
+      <Container maxW="container.lg">
         {/* Bagian untuk Header dengan tombol login di kanan atas */}
         <HStack mb={8}>
           <Heading as="h1" color="pmiRed.500" fontWeight="bold" size="lg">

@@ -79,13 +79,13 @@ function Login() {
   const MotionHeading = motion(Heading); // Motion untuk heading login
 
   return (
-    <Flex align="center" justify="center" minH="100vh" bg="neutral.50" direction="column">      
+    <Flex align="center" justify="center" minH="100vh" direction="column">      
       {/* Card Login */}
       <MotionBox
         initial={isFirstLoad ? { opacity: 0, y: -30 } : {}}
         animate={isFirstLoad ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, ease: "easeInOut" }}
-        bg="white"
+        bg="rgba(255, 255, 255, 0.8)"
         p={8}
         rounded="md"
         shadow="lg"

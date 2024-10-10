@@ -67,8 +67,8 @@ function Register() {
   };
 
   return (
-    <Flex align="center" justify="center" minH="100vh" bg="neutral.50"> {/* Latar belakang terang */}
-      <Box bg="white" p={8} rounded="lg" shadow="lg" width={{ base: "90%", md: "400px" }}> {/* Styling card */}
+    <Flex align="center" justify="center" minH="100vh"> {/* Latar belakang terang */}
+      <Box bg="rgba(255, 255, 255, 0.8)" p={8} rounded="lg" shadow="lg" width={{ base: "90%", md: "400px" }}> {/* Styling card */}
         <Heading mb={6} textAlign="center" color="pmiRed.500" fontSize="2xl"> {/* Warna heading merah PMI */}
           Register
         </Heading>

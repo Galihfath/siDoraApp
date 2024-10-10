@@ -1,6 +1,6 @@
 // theme.js
 import { extendTheme } from '@chakra-ui/react';
-
+import backgroundImage from '../assets/background.jpeg'; // Sesuaikan path ke gambar
 // Template warna PMI dengan tambahan hijau dan biru serta penyesuaian untuk RS Persahabatan
 const theme = extendTheme({
   colors: {
@@ -61,7 +61,10 @@ const theme = extendTheme({
     global: {
       "html, body": {
         color: "neutral.900", // Warna teks utama
-        bg: "neutral.50", // Warna latar belakang
+        bgImage: `url(${backgroundImage})`,  // Warna latar belakang
+        bgSize: 'cover', 
+        bgPosition: 'center',
+        bgRepeat: 'no-repeat' 
       },
       a: {
         color: "blueAccent.500", // Warna default link
