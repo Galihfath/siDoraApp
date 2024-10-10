@@ -1,6 +1,8 @@
 // FormField.js
 import React from 'react';
-import { FormControl, FormLabel, Input, Select } from '@chakra-ui/react';
+import { FormControl, FormLabel } from '@chakra-ui/react';
+import InputField from './InputField';
+import SelectField from './SelectField';
 
 const FormField = ({ label, name, type = 'text', value, onChange, isSelect = false, options = [], placeholder = '' }) => (
   <FormControl id={name} isRequired>
@@ -8,24 +10,19 @@ const FormField = ({ label, name, type = 'text', value, onChange, isSelect = fal
       {label}
     </FormLabel>
     {isSelect ? (
-      <Select
+      <SelectField
         name={name}
         value={value}
         onChange={onChange}
+        options={options}
         placeholder={placeholder}
         borderColor="neutral.300"
         focusBorderColor="blueAccent.500"
         bg="white"
-        _hover={{ borderColor: "neutral.400" }}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
+        _hover={{ borderColor: 'neutral.400' }}
+      />
     ) : (
-      <Input
+      <InputField
         name={name}
         type={type}
         value={value}
@@ -34,7 +31,7 @@ const FormField = ({ label, name, type = 'text', value, onChange, isSelect = fal
         borderColor="neutral.300"
         focusBorderColor="blueAccent.500"
         bg="white"
-        _hover={{ borderColor: "neutral.400" }}
+        _hover={{ borderColor: 'neutral.400' }}
       />
     )}
   </FormControl>
