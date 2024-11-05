@@ -7,6 +7,8 @@ import App from './App';
 import theme from './theme/theme';
 import { UserProvider } from './context/UserContext'; // Import UserProvider dari context
 import reportWebVitals from './reportWebVitals';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

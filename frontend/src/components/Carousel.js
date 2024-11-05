@@ -1,15 +1,15 @@
-// components/Carousel.js
+// src/components/Carousel.js
 import React from 'react';
 import Slider from 'react-slick';
 import { Box } from '@chakra-ui/react';
 import CarouselItem from './CarouselItem'; // Import CarouselItem.js
+import jk from '../assets/jk.jpg'
 
 const Carousel = () => {
-  // Data carousel yang sebelumnya kamu berikan
   const carouselItems = [
     {
-      image: 'https://via.placeholder.com/800x400',
-      alt: 'Donor Darah 1',
+      image: jk ,
+      alt: 'jk',
       title: 'Ayo Donor Darah!',
       description: 'Menyumbangkan darah adalah tindakan yang mulia untuk membantu sesama.',
       buttonLabel: 'Pelajari Lebih Lanjut',
@@ -44,7 +44,7 @@ const Carousel = () => {
   };
 
   return (
-    <Box w="80%" mx="auto" mt={4}>
+    <Box w="60%" maxW="800px" mx="auto" mt={4} boxShadow="md" borderRadius="md" overflow="hidden">
       <Slider {...settings}>
         {carouselItems.map((item, index) => (
           <CarouselItem

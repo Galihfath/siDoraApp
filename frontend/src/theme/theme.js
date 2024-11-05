@@ -62,8 +62,8 @@ const theme = extendTheme({
       "html, body": {
         color: "neutral.900", // Warna teks utama
         bgImage: `url(${backgroundImage})`,  // Warna latar belakang
-        bgSize: 'cover', 
-        bgPosition: 'center',
+        bgSize: '100 px', 
+        bgPosition: 'top',
         bgRepeat: 'no-repeat' 
       },
       a: {
